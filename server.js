@@ -1,6 +1,7 @@
 require('dotenv').config({
     path: '.env'
 });
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -28,6 +29,21 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+
+app.use(async (req, res, next) => {
+    const token = req.headers['authorization'];
+    console.log(token, typeof token);
+    if (token !== null) {
+        try {
+            const currentUser = await jwt.verify(token, process.env.SECRET);
+            console.log(currentUser);
+        }
+        catch (err) {
+            console.error(err);
+        }
+    }
+    next();
+})
 
 const server = new ApolloServer({
     resolvers,
