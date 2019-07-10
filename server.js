@@ -30,23 +30,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// app.use(async (request, res, next) => {
-//     const token = request.headers['authorization'];
-//     console.log(request.connection.headers)
-//     // const token = request.req ? request.req.headers.authorization : request.connection?request.connection.context.authorization:null
-//     console.log(token, typeof token);
-//     if (token) {
-//         try {
-//             const currentUser = await jwt.verify(token, process.env.SECRET);
-//             console.log(currentUser)
-//             request.currentUser = currentUser;
-//         }
-//         catch (err) {
-//             console.error(err);
-//         }
-//     }
-//     next();
-// })
 
 const server = new ApolloServer({
     resolvers,
@@ -54,9 +37,11 @@ const server = new ApolloServer({
     context: async (request) => {
         const token = request.req ? request.req.headers.authorization : request.connection ? request.connection.context.authorization : null;
         let currentUser = null;
-        if (token) {
+        console.log(token,typeof token)
+        if (token!=="null") {
             try {
                 currentUser = await jwt.verify(token, process.env.SECRET);
+                console.log(currentUser)
             }
             catch (err) {
                 console.error(err);
