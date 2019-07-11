@@ -27,6 +27,10 @@ module.exports = {
                     model: "Recipe"
                 });
             return user;
+        },
+        getRecipe: async (root, { _id }, { Recipe }) => {
+            const recipe = await Recipe.findOne({ _id });
+            return recipe;
         }
     },
     Mutation: {
