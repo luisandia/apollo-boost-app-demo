@@ -1,9 +1,13 @@
 import React from 'react'
+import UserInfo from './UserInfo';
+import UserRecipes from './UserRecipes';
 
-const Profile = () => {
+const Profile = ({ session }) => {
+    console.log(session)
     return (
-        <div>
-            Profile
+        <div className="App">
+            <UserInfo session={session} />
+            <UserRecipes username={session.getCurrentUser.username} />
         </div>
     )
 }

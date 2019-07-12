@@ -14,7 +14,7 @@ module.exports = {
 
         },
         getAllRecipes: async (root, args, { Recipe }) => {
-            const allRecipes = await Recipe.find();
+            const allRecipes = await Recipe.find().sort({ createdDate: 'desc' });
             return allRecipes;
         },
         getCurrentUser: async (root, args, { currentUser, User }) => {
@@ -31,7 +31,31 @@ module.exports = {
         getRecipe: async (root, { _id }, { Recipe }) => {
             const recipe = await Recipe.findOne({ _id });
             return recipe;
+        },
+        searchRecipes: async (root, { searchTerm }, { Recipe }) => {
+            if (searchTerm) {
+                const searchResults = await Recipe.find({
+                    $text: { $search: searchTerm }
+                },
+                    {
+                        score: { $meta: "textScore" }
+                    }).sort({
+                        score: { $meta: "textScore" }
+                    });
+                return searchResults;
+            } else {
+                const recipes = await Recipe.find().sort({
+                    ilikes: 'desc', createdDate: 'desc'
+                });
+                return recipes;
+            }
+        },
+        getUserRecipes: async (root, { username }, { Recipe }) => {
+            console.log(username)
+            const userRecipes = await Recipe.find({ username }).sort({ createdDate: 'desc' });
+            return userRecipes;
         }
+
     },
     Mutation: {
         addRecipe: async (root, args, ctx) => {

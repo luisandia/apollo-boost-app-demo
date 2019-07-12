@@ -25,7 +25,9 @@ type Query{
     users:[User!],
     getAllRecipes:[Recipe],
     getCurrentUser:User,
-    getRecipe(_id:ID!):Recipe
+    getRecipe(_id:ID!):Recipe,
+    searchRecipes(searchTerm: String):[Recipe],
+    getUserRecipes(username:String):[Recipe]
 }
 
 type Token{

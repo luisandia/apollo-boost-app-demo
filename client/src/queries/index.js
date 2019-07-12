@@ -37,6 +37,10 @@ query{
         username
         joinDate
         email
+        favorites{
+            _id
+            name
+        }
     }
 }
 `;
@@ -51,7 +55,55 @@ query($_id:ID!){
         instructions
         createdDate
         likes
+        username
     }
 }
 
+`;
+
+export const ADD_RECIPE = gql`
+mutation(
+    $name:String!
+    $description:String!
+    $category:String!
+    $instructions:String!
+    $username:String!
+){
+    addRecipe(
+        name:$name
+        description:$description
+        category:$category
+        instructions:$instructions
+        username:$username
+    ){
+        _id
+        name
+        category
+        description
+        instructions
+        createdDate
+        likes
+    }
+}
+
+`;
+
+export const SEARCH_RECIPES = gql`
+query($searchTerm:String ){
+    searchRecipes(searchTerm:$searchTerm){
+        _id
+        name
+        likes
+    }
+}
+`
+
+export const GET_USER_RECIPES = gql`
+query($username:String){
+    getUserRecipes(username:$username){
+        _id
+        name
+        likes
+    }
+}
 `;
