@@ -14,9 +14,15 @@ import AddRecipe from './components/Recipes/AddRecipe';
 import Profile from './components/profile/Profile';
 import RecipePage from './components/Recipes/RecipePage';
 
+let uri;
+if (process.env.NODE_ENV === 'production') {
+    uri = 'https://graphql-apollo-recipes.herokuapp.com/graphql'
+} else {
+    uri = 'http://localhost:4444/graphql';
+}
 // Pass your GraphQL endpoint to uri
 const client = new ApolloClient({
-    uri: 'http://localhost:4444/graphql',
+    uri,
     fetchOptions: { credentials: 'include' },
     request: operation => {
         const token = localStorage.getItem('token');

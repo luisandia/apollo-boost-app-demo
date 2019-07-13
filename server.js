@@ -9,7 +9,7 @@ const Recipe = require('./models/Recipe');
 const User = require('./models/User');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
-
+const path = require('path');
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 const http = require('http');
@@ -37,8 +37,8 @@ const server = new ApolloServer({
     context: async (request) => {
         const token = request.req ? request.req.headers.authorization : request.connection ? request.connection.context.authorization : null;
         let currentUser = null;
-        console.log(token,typeof token)
-        if (token!=="null") {
+        console.log(token, typeof token)
+        if (token !== "null") {
             try {
                 currentUser = await jwt.verify(token, process.env.SECRET);
                 console.log(currentUser)
@@ -56,6 +56,16 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
+
+
+
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
 
 const PORT = process.env.PORT || 4444;
 
