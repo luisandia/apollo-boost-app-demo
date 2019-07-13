@@ -78,7 +78,7 @@ class LikeRecipe extends Component {
                     update={this.update}
                 >
                     {(likeRecipe) => {
-                        return username && <button onClick={() => this.handleClick(likeRecipe, unlikeRecipe)}
+                        return username && <button className="like-button" onClick={() => this.handleClick(likeRecipe, unlikeRecipe)}
                         >{liked ? 'Unlike' : 'Like'}</button>;
                     }}
                 </Mutation>

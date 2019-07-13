@@ -59,10 +59,10 @@ module.exports = {
     },
     Mutation: {
         addRecipe: async (root, args, ctx) => {
-            const { name, description, category, instructions, username } = args;
+            const { name, description, imageUrl, category, instructions, username } = args;
             const { Recipe } = ctx;
 
-            const newRecipe = await new Recipe({ name, description, category, instructions, username }).save();
+            const newRecipe = await new Recipe({ name, description, imageUrl, category, instructions, username }).save();
             return newRecipe;
         },
         signupUser: async (root, { username, email, password }, { User }) => {
