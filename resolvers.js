@@ -87,7 +87,21 @@ module.exports = {
                 throw new Error("Invalid password");
             }
             return { token: createToken(user, process.env.SECRET, '1hr') };
+        },
+        deleteUserRecipe: async (root, { _id }, { Recipe }) => {
+            const recipe = Recipe.findOneAndRemove({ _id });
+            return recipe;
 
+        },
+        likeRecipe: async (root, { _id, username }, { Recipe, User }) => {
+            const recipe = await Recipe.findOneAndUpdate({ _id }, { $inc: { likes: 1 } });
+            await User.findOneAndUpdate({ username }, { $addToSet: { favorites: _id } });
+            return recipe;
+        },
+        unlikeRecipe: async (root, { _id, username }, { Recipe, User }) => {
+            const recipe = await Recipe.findOneAndUpdate({ _id }, { $inc: { likes: -1 } });
+            await User.findOneAndUpdate({ username }, { $pull: { favorites: _id } });
+            return recipe;
         }
     }
 };
